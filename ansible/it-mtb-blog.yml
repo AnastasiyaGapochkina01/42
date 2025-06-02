@@ -1,0 +1,5 @@
+---
+- hosts: web-servers
+  become: true
+  roles:
+    - setup-it-mtb-blog
