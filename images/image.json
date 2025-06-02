@@ -1,0 +1,31 @@
+{
+  "builders": [
+    {
+      "type": "yandex",
+      "token": "y0__xDB1f6iBxjB3RMgxKL3oBNopbfhgwNrNEKXB7j_77LbriTJmg",
+      "folder_id": "b1gdge57rslfb323otnm",
+      "zone": "ru-central1-b",
+      "image_name": "debian-12-nginx",
+      "image_family": "debian-web-server",
+      "source_image_family": "debian-12",
+      "subnet_id": "e2lcmpigub6jp4jl52n7",
+      "use_ipv4_nat": true,
+      "disk_type": "network-hdd",
+      "ssh_username": "debian",
+      "ssh_private_key_file": "/home/anestesia/.ssh/id_ed25519"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "echo 'Creating image'",
+        "sudo apt-get update -y",
+        "sudo apt-get install -y nginx",
+        "sudo su -",
+        "sudo systemctl enable nginx.service",
+        "curl localhost"
+      ]
+    }
+  ]
+}
