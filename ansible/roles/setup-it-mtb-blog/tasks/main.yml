@@ -1,0 +1,40 @@
+---
+# tasks file for seup-it-mtb-blog
+- name: Prepare
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  loop:
+    - git
+    - bash-completion
+
+- name: Copy nginx config
+  copy:
+    src: default
+    dest: /etc/nginx/sites-available/default
+  notify: reload nginx
+
+- name: Clone repo
+  become: true
+  become_user: debian
+  command: git clone git@gitlab.com:devops201206/it-mtb-blog.git /tmp/it-mtb-blog
+  delegate_to: web-2
+
+- name: Move repo
+  copy:
+    src: /tmp/it-mtb-blog/
+    dest: /var/www/it-mtb-blog
+    remote_src: true
+  delegate_to: web-2
+  tags: copy
+
+#  git:
+#    repo: git@gitlab.com:devops201206/it-mtb-blog.git
+#    dest: /var/www/it-mtb-blog
+#    accept_hostkey: true
+#    clone: yes
+
+- name: Check
+  command: curl -I 127.0.0.1
+  tags: check
